@@ -9,8 +9,9 @@
 #import "AppDelegate.h"
 #import "ViewController.h"
 #import "ViewControllerNext.h"
+#import "CustomPageVC.h"
 
-@interface AppDelegate ()
+@interface AppDelegate () <UIPageViewControllerDataSource>
 
 @end
 
@@ -19,14 +20,45 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
 //    UITabBarController *tabBarController = [UITabBarController new];
+//    tabBarController.view.backgroundColor = [UIColor magentaColor];
 //    tabBarController.viewControllers = @[
 //                                         [ViewController new],
 //                                         [ViewControllerNext new]
 //                                         ];
+//    
 //    self.window.rootViewController = tabBarController;
+    CustomPageVC *pageVC = [[CustomPageVC alloc] initWithTransitionStyle:UIPageViewControllerTransitionStylePageCurl navigationOrientation:UIPageViewControllerNavigationOrientationHorizontal options: @{UIPageViewControllerOptionSpineLocationKey: @(UIPageViewControllerSpineLocationMid)}];
+    pageVC.dataSource = self;
+    pageVC.view.frame = self.window.frame;
+    UIViewController *vc1 = [ViewController new];
+    vc1.view.backgroundColor = [UIColor redColor];
+    vc1.view.frame = self.window.frame;
+    UIViewController *vc2 = [ViewController new];
+    vc1.view.backgroundColor = [UIColor greenColor];
+    vc2.view.frame = self.window.frame;
+    
+    [pageVC setViewControllers:@[
+                                 vc1,
+                                 vc2
+                                 ]
+                     direction:(UIPageViewControllerNavigationDirectionForward)
+                      animated:YES
+                    completion:^(BOOL finished){
+                        NSLog(@"finished");
+                    }];
+    self.window.rootViewController = pageVC;
     return YES;
 }
 
+-(nullable UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerAfterViewController:(UIViewController *)viewController{
+    NSLog(@"vc");
+    return viewController;
+}
+
+-(nullable UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerBeforeViewController:(UIViewController *)viewController{
+    NSLog(@"vc");
+    return viewController;
+}
 
 - (void)applicationWillResignActive:(UIApplication *)application {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.

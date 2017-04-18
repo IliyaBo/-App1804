@@ -13,6 +13,8 @@
 
 @interface AppDelegate () <UIPageViewControllerDataSource>
 
+@property (nonatomic, strong) NSArray <UIViewController *> *vcList;
+
 @end
 
 @implementation AppDelegate
@@ -30,6 +32,9 @@
     CustomPageVC *pageVC = [[CustomPageVC alloc] initWithTransitionStyle:UIPageViewControllerTransitionStylePageCurl navigationOrientation:UIPageViewControllerNavigationOrientationHorizontal options: @{UIPageViewControllerOptionSpineLocationKey: @(UIPageViewControllerSpineLocationMid)}];
     pageVC.dataSource = self;
     pageVC.view.frame = self.window.frame;
+    
+    
+    
     UIViewController *vc1 = [ViewController new];
     vc1.view.backgroundColor = [UIColor redColor];
     vc1.view.frame = self.window.frame;
@@ -37,10 +42,11 @@
     vc1.view.backgroundColor = [UIColor greenColor];
     vc2.view.frame = self.window.frame;
     
-    [pageVC setViewControllers:@[
-                                 vc1,
-                                 vc2
-                                 ]
+    self.vcList = @[
+                    vc1,
+                    vc2
+                    ];
+    [pageVC setViewControllers: self.vcList
                      direction:(UIPageViewControllerNavigationDirectionForward)
                       animated:YES
                     completion:^(BOOL finished){
@@ -50,15 +56,21 @@
     return YES;
 }
 
--(nullable UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerAfterViewController:(UIViewController *)viewController{
-    NSLog(@"vc");
-    return viewController;
-}
 
 -(nullable UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerBeforeViewController:(UIViewController *)viewController{
-    NSLog(@"vc");
-    return viewController;
+    NSLog(@"vcBefore");
+    NSInteger currentIndex = [self.vcList indexOfObject:viewController];
+    NSInteger previousIndex = abs((currentIndex - 1) % self.vcList.count);
+    return self.vcList[previousIndex];
 }
+
+-(nullable UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerAfterViewController:(UIViewController *)viewController{
+    NSLog(@"vcAfter");
+    NSInteger currentIndex = [self.vcList indexOfObject:viewController];
+    NSInteger nextIndex = abs((currentIndex + 1) % self.vcList.count);
+    return self.vcList[nextIndex];
+}
+
 
 - (void)applicationWillResignActive:(UIApplication *)application {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.

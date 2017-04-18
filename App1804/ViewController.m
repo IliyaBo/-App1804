@@ -7,8 +7,11 @@
 //
 
 #import "ViewController.h"
+#import "ViewControllerNext.h"
 
 @interface ViewController ()
+
+@property (nonatomic, weak) IBOutlet UIButton *button; //weak - сам иос убирает ссылку
 
 @end
 
@@ -16,7 +19,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view, typically from a nib.
+    
+    //[self .button addTarget:self action:@selector(buttonTapped:) forControlEvents:(UIControlEventTouchUpInside)]; // тоже самое что и (1)
 }
 
 
@@ -25,5 +29,11 @@
     // Dispose of any resources that can be recreated.
 }
 
+
+-(IBAction)buttonTapped:(id)sender{ //(1)
+    ViewControllerNext *vc = [ViewControllerNext new];
+    vc.view.backgroundColor = [UIColor cyanColor];
+    [self.navigationController pushViewController:vc animated:YES];
+}
 
 @end

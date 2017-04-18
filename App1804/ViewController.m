@@ -19,7 +19,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+    //self.tabBarItem.title = @"Первый таб";
+    self.tabBarItem = [[UITabBarItem alloc] initWithTabBarSystemItem:UITabBarSystemItemFavorites tag:666];
     //[self .button addTarget:self action:@selector(buttonTapped:) forControlEvents:(UIControlEventTouchUpInside)]; // тоже самое что и (1)
 }
 
